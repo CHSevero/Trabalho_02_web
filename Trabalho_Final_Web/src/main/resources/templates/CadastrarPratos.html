@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
+</head>
+<body>
+
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<a class="navbar-brand" href="#"></a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#navbarNav" aria-controls="navbarNav"
+			aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarNav">
+			<ul class="navbar-nav">
+				<li class="nav-item active"><a class="nav-link" href="/home">Home
+						<span class="sr-only">(current)</span>
+				</a></li>
+				<li class="nav-item"><a class="nav-link" href="/prato/listar">Galeria de Pratos</a>
+				</li>
+				
+				<li sec:authorize="hasRole('ROLE_USER')" class="nav-item"><a class="nav-link" href="/sacola/index">Carrinho</a>
+				</li>
+				
+				<li sec:authorize="!hasAnyRole('ROLE_USER','ROLE_GERENTE')" class="nav-item"><a class="nav-link" href="/cliente/cadastrar">Cadastrar</a>
+				</li>
+				<li sec:authorize="!hasAnyRole('ROLE_USER','ROLE_GERENTE')" class="nav-item"><a class="nav-link" href="/logar">Login</a>
+				</li>
+				<li sec:authorize="hasAnyRole('ROLE_USER','ROLE_GERENTE')" class="nav-item"><a class="nav-link" href="/logout">Logout</a>
+				</li>
+				<li sec:authorize="hasRole('ROLE_GERENTE')" class="nav-item"><a class="nav-link" href="/prato/cadastrar">Cadastrar Pratos</a>
+				</li><li sec:authorize="hasRole('ROLE_USER')" class="nav-item"><a class="nav-link" href="/cliente/pedidos">Histórico de Pedido</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+
+	<form action="/prato/salvar" method="POST" th:object="${prato}"
+		enctype="multipart/form-data">
+		
+		<div class="alert alert-success" role="alert" th:if="${!#strings.isEmpty(mensagem)}">
+  		<span th:text="${mensagem}"></span>
+		</div>
+
+
+		<div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
+  			<div th:each="detailedError : ${#fields.detailedErrors()}"> 
+				<span th:text="${detailedError.message}"></span>  
+ 			</div>
+		</div>
+		
+		<input type="hidden" th:field="*{Id}">
+		 Nome: <input type="text" th:field="*{nome}"> <br>
+		 Preço: <input type="text" th:field="*{preco}"> <br> 
+		 Imagem: <input type="file" name="imagem"><br><br>
+		<input type="submit" value="Cadastrar">
+
+	</form>
+</body>
+</html>

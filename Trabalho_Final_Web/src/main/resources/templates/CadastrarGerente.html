@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<form action="/gerente/salvar" method="POST" th:object="${gerente}"
+		enctype="multipart/form-data">
+		<input type="hidden" th:field="*{id}">
+		 Nome: <input type="text" th:field="*{nome}"> <br>
+		 cpf: <input type="text" th:field="*{cpf}"> <br> 
+	     senha: <input type="text" th:field="*{senha}"> <br>
+		<input type="submit" value="Cadastrar">
+
+	</form>
+</body>
+</html>

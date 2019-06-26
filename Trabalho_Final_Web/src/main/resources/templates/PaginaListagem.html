@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
+
+</head>
+<body>
+
+
+
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<a class="navbar-brand" href="#"></a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#navbarNav" aria-controls="navbarNav"
+			aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarNav">
+			<ul class="navbar-nav">
+				<li class="nav-item active"><a class="nav-link" href="/home">Home
+						<span class="sr-only">(current)</span>
+				</a></li>
+				<li class="nav-item"><a class="nav-link" href="/prato/listar">Galeria de Pratos</a>
+				</li>
+				
+				<li sec:authorize="hasRole('ROLE_USER')" class="nav-item"><a class="nav-link" href="/sacola/index">Carrinho</a>
+				</li>
+				
+				<li sec:authorize="!hasAnyRole('ROLE_USER','ROLE_GERENTE')" class="nav-item"><a class="nav-link" href="/cliente/cadastrar">Cadastrar</a>
+				</li>
+				<li sec:authorize="!hasAnyRole('ROLE_USER','ROLE_GERENTE')" class="nav-item"><a class="nav-link" href="/logar">Login</a>
+				</li>
+				<li sec:authorize="hasAnyRole('ROLE_USER','ROLE_GERENTE')" class="nav-item"><a class="nav-link" href="/logout">Logout</a>
+				</li>
+				<li sec:authorize="hasRole('ROLE_GERENTE')" class="nav-item"><a class="nav-link" href="/prato/cadastrar">Cadastrar Pratos</a>
+				</li></li><li sec:authorize="hasRole('ROLE_USER')" class="nav-item"><a class="nav-link" href="/cliente/pedidos">Histórico de Pedido</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th scope="col">Id</th>
+				<th scope="col">Nome</th>
+				<th scope="col">Preco</th>
+			</tr>
+		</thead>
+		<tbody>
+		
+		
+
+			<tr th:each="prato : ${listaDePratos}">
+				<td th:text="${prato.Id}"></td>
+				<td th:text="${prato.nome}"></td>
+				<td th:text="${prato.preco}"></td>
+				<td><a sec:authorize="hasRole('ROLE_GERENTE')" class="btn btn-danger" th:href="@{/prato/excluir/{Id}(Id = ${prato.Id})}">Excluir</a></td> 
+				<td><a sec:authorize="hasRole('ROLE_GERENTE')" class="btn btn-primary" th:href="@{/prato/atualizar/{Id}(Id = ${prato.Id})}">Atualizar</a></td>
+				<td><a sec:authorize="hasRole('ROLE_USER')" class="btn btn-primary" th:href="@{/sacola/add/{Id}(Id = ${prato.Id})}">Adicionar ao carrinho</a></td>
+				<td><a sec:authorize="!hasAnyRole('ROLE_USER','ROLE_GERENTE')" class="btn btn-primary" th:href="@{/logar}">Adicionar ao carrinho</a></td>
+				<td><img width="100" heigth="100" th:src="@{'/images/'+${prato.nome}+.png}"/></td>
+			
+			</tr>
+			
+		</tbody>
+	</table>
+	
+	<script src="/js/bootstrap.min.js"></script>
+</body>
+</html>
